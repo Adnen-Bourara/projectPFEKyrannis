@@ -37,7 +37,7 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(company);
     }
 
-    @DeleteMapping("/Company/delete/{id]")
+    @DeleteMapping("/Company/delete/{id}")
     public Object delete(@PathVariable Long id)
     {
         companyService.deleteCompany(id);

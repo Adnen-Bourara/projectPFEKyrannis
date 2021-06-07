@@ -73,6 +73,7 @@ public class UserController {
 
         User assistant = userService.getById(id2);
         user.setAssistant(assistant);
+        System.out.println(user.getPassword());
         user.setPassword(Integer.toString(user.getPassword().hashCode()));
         user.setRole("Client");
         Company company = companyService.getById(id1);
@@ -85,11 +86,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
+    @PostMapping("/User/checkUsername")
+    public Object checkUserName(@RequestBody User user)
+    {String response = new String();
+        User userNameCheck = userService.checkUsername(user.getUsername());
+        if (user.getId() != userNameCheck.getId())
+            response = "username already used";
+        else
+            response = "username clean";
+        System.out.println(response);
+        return response;
+    }
+
     @PutMapping("/User/Edit")
     public Object editUser(@RequestBody User user)
-    { User userNameCheck = userService.checkUsername(user.getUsername()) ;
-        if(user.getId() != userNameCheck.getId())
-        return ResponseEntity.status(HttpStatus.CREATED).body("username already used");
+    {
 
         User oldPassword = userService.getById(user.getId());
         user.setPassword(oldPassword.getPassword());
@@ -102,14 +113,33 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @PutMapping("/User/ChangePassword/{id]")
-    public Object editUser(@RequestBody String newpassword)
-    { User userNameCheck = userService.checkUsername(user.getUsername()) ;
-        if(user.getId() != userNameCheck.getId())
-            return ResponseEntity.status(HttpStatus.CREATED).body("username already used");
+    @PutMapping("User/Edit/Company/{id1}/Assistant/{id2}")
+    public Object editClient(@RequestBody User user,@PathVariable("id1") Long id1,@PathVariable("id2") Long id2) {
+
+
+        User assistant = userService.getById(id2);
+        user.setAssistant(assistant);
+
+        Company company = companyService.getById(id1);
+        user.setCompany(company);
 
         User oldPassword = userService.getById(user.getId());
         user.setPassword(oldPassword.getPassword());
+        user = userService.editUser(user);
+
+        String hiddenPassword = "";
+        for (int i = 0; i < user.getPassword().length(); i++)
+            hiddenPassword += '*';
+        user.setPassword(hiddenPassword);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PutMapping("/User/ChangePassword/{id]")
+    public Object editUser(@RequestBody String newpassword,@PathVariable Long id)
+    {
+
+        User user = userService.getById(id);
+        user.setPassword(Integer.toString(newpassword.hashCode()));
         user = userService.editUser(user);
 
         String hiddenPassword = "";

@@ -86,9 +86,11 @@ public class UserController {
 
     @PostMapping("/User/checkUsername")
     public Object checkUserName(@RequestBody User user)
-    {String response = new String();
+    {   String response = new String();
         User userNameCheck = userService.checkUsername(user.getUsername());
-        if (user.getId() != userNameCheck.getId())
+        if (userNameCheck == null )
+            response = "username clean";
+        else if (user.getId() != userNameCheck.getId())
             response = "username already used";
         else
             response = "username clean";
@@ -132,7 +134,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @PutMapping("/User/ChangePassword/{id]")
+    @PutMapping("/User/ChangePassword/{id}")
     public Object editUser(@RequestBody String newpassword,@PathVariable Long id)
     {
 

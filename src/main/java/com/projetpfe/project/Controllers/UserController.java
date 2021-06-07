@@ -45,7 +45,7 @@ public class UserController {
         }
         catch (Exception e )
         {
-            return ResponseEntity.status(HttpStatus.CREATED).body("login failed");
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
         }
 
     }
@@ -68,9 +68,7 @@ public class UserController {
 
     @PostMapping("/User/createClient/Company/{id1}/Assistant/{id2}")
     public Object createClient(@RequestBody User user,@PathVariable("id1") Long id1,@PathVariable("id2") Long id2)
-    {   if(userService.checkUsername(user.getUsername()) != null)
-        return ResponseEntity.status(HttpStatus.CREATED).body("username already used");
-
+    {
         User assistant = userService.getById(id2);
         user.setAssistant(assistant);
         System.out.println(user.getPassword());

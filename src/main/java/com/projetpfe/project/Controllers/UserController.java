@@ -33,6 +33,8 @@ public class UserController {
         {
             sp = new User("Kyrannis","Kyrannis2021");
             sp.setRole("SuperAdmin");
+            sp.setFirstName("Super");
+            sp.setLastName("Admin");
             userService.addUser(sp);
         }
         try {

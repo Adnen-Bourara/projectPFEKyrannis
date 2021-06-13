@@ -11,6 +11,7 @@ public interface UserService {
     User editUser(User user);
     User findSuperAdmin();
     User checkUsername(String userName);
+    List<User> getAllUsers();
     List<User> getAllClients();
     List<User> getAllAdmins();
     void deleteUser(Long id);

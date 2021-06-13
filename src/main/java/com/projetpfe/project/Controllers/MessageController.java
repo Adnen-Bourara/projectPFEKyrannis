@@ -38,25 +38,28 @@ public class MessageController {
     @GetMapping("/Message/getConversation/user1/{id1}/user2/{id2}")
     public Object getConversations(@PathVariable("id1") Long id1,@PathVariable("id2") Long id2)
     {
-        List<Message> messageList = messageService.getConversation(id1, id2);
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageList);
+        List<Message> messageList1 = messageService.getConversation(id1, id2);
+        List<Message> messageList2 = messageService.getConversation(id2, id1);
+        messageList1.addAll(messageList2);
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageList1);
     }
 
     @GetMapping("/Message/getListConversation/{iduser}")
-    public Object getListConversation(@PathVariable Long id)
+    public Object getListConversation(@PathVariable("iduser") Long id)
     {
         List<Message> messagesReceived = messageService.getReceivedMessages(id);
         List<Message> messagesSent = messageService.getSentMessages(id);
-
+        System.out.println("messagesReceived :" + messagesReceived);
+        System.out.println("messagesSent" + messagesSent);
         List<User> listSenders = messagesReceived.stream().map(a-> a.getSender()).distinct().collect(Collectors.toList());
-        List<User> listReceivers = messagesSent.stream().map(a-> a.getSender()).distinct().collect(Collectors.toList());
+        List<User> listReceivers = messagesSent.stream().map(a-> a.getReceiver()).distinct().collect(Collectors.toList());
 
 //        messagesReceived = messagesReceived.stream().sorted(Comparator.comparing(Message::getDateEnvoie)).collect(Collectors.toList());
 //        messagesSent = messagesSent.stream().sorted(Comparator.comparing(Message::getDateEnvoie)).collect(Collectors.toList());
         List<User> listConversation = new ArrayList<>();
         listConversation.addAll(listSenders);
         listConversation.addAll(listReceivers);
-        listConversation = listConversation.stream().distinct().collect(Collectors.toList());
+     listConversation = listConversation.stream().distinct().collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.CREATED).body(listConversation);
 //    
 

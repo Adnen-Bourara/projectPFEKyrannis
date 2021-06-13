@@ -151,6 +151,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
+    @GetMapping("/User/getAll")
+    public Object getAll()
+    {
+        List<User> userList = userService.getAllUsers();
+        for (User user : userList) {
+            String hiddenPassword = "";
+            for (int i=0; i<user.getPassword().length(); i++)
+                hiddenPassword += '*';
+            user.setPassword(hiddenPassword);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(userList);
+    }
+
     @GetMapping("/User/GetById/{id}")
     public Object getById(@PathVariable Long id)
     {

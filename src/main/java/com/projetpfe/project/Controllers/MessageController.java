@@ -40,7 +40,13 @@ public class MessageController {
     {
         List<Message> messageList1 = messageService.getConversation(id1, id2);
         List<Message> messageList2 = messageService.getConversation(id2, id1);
+
+        for ( Message m : messageList2) {
+            m.setSeen("True");
+            messageService.sendMessage(m);
+        }
         messageList1.addAll(messageList2);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(messageList1);
     }
 
@@ -63,5 +69,12 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(listConversation);
 //    
 
+    }
+
+    @GetMapping("/Message/CheckSeen/{idSender}/{idReceiver}")
+    public Object checkIfNewMessage(@PathVariable("idSender") Long id1,@PathVariable("idReceiver") Long id2)
+    {
+        List<Message> messageList1 = messageService.getConversation(id1, id2);
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageList1);
     }
 }

@@ -15,6 +15,10 @@ public class Message {
 
     private String dateEnvoie;
 
+    private String seen;
+
+
+
     @ManyToOne
     @JoinColumn(name = "SenderId")
     private User sender;
@@ -65,6 +69,14 @@ public class Message {
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+
+    public String getSeen() {
+        return seen;
+    }
+
+    public void setSeen(String seen) {
+        this.seen = seen;
     }
 
     @Override
